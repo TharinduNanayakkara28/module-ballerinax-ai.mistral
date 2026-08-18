@@ -91,6 +91,7 @@ public enum MISTRAL_AI_MODEL_NAMES {
     MINISTRAL_8B_LATEST = "ministral-8b-latest",
     MISTRAL_SABA_LATEST = "mistral-saba-latest",
     CODESTRAL_LATEST = "codestral-latest",
+    MAGISTRAL_SMALL_LATEST = "magistral-small-latest",
     MISTRAL_SMALL_2402 = "mistral-small-2402",
     MISTRAL_SMALL_2409 = "mistral-small-2409",
     MISTRAL_SMALL_2501 = "mistral-small-2501",

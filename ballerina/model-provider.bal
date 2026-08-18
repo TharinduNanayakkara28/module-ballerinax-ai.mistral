@@ -234,6 +234,15 @@ public isolated client class ModelProvider {
         if response is error {
             return error ai:LlmConnectionError("Error while connecting to the model for streaming", response);
         }
+        if response.statusCode != http:STATUS_OK {
+            // A non-2xx response (e.g. rate limiting, invalid model) is returned as a
+            // plain JSON error body, not an SSE stream. Surface it instead of failing
+            // with a misleading "not text/event-stream" error from getSseEventStream().
+            json|error errorPayload = response.getJsonPayload();
+            string detail = errorPayload is json ? errorPayload.toJsonString() : response.statusCode.toString();
+            return error ai:LlmConnectionError(
+                string `Model returned an error while streaming (HTTP ${response.statusCode}): ${detail}`);
+        }
         stream<http:SseEvent, error?>|error sseStream = response.getSseEventStream();
         if sseStream is error {
             return error ai:Error("Failed to open the SSE stream from the model", sseStream);
